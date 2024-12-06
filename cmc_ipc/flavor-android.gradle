@@ -1,0 +1,13 @@
+android {
+    productFlavors {
+        android {
+            versionName "1.2"
+
+            manifestPlaceholders = [authPlusApplicationId: "com.cmc.android"]
+
+            dimension "CMC_IPC"
+            buildConfigField "String", "FLAVOR_APPCLIATION_ID", '"com.cmc.android"'
+            buildConfigField "String", "FLAVOR_REQ_OS", '"ANDROID"'
+        }
+    }
+}
