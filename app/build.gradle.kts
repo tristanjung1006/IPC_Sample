@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.ryusw.ipc"
+    namespace = "com.cmc.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.ryusw.ipc"
+        applicationId = "com.cmc.app"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

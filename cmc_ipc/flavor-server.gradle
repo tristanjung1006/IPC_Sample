@@ -3,7 +3,7 @@ android {
         server {
             versionName "1.1"
 
-            manifestPlaceholders = [authPlusApplicationId: "com.cmc.server"]
+            manifestPlaceholders = [applicationId: "com.cmc.server"]
 
             dimension "CMC_IPC"
             buildConfigField "String", "FLAVOR_APPCLIATION_ID", '"com.cmc.server"'

@@ -3,7 +3,7 @@ android {
         ios {
             versionName "1.3"
 
-            manifestPlaceholders = [authPlusApplicationId: "com.cmc.ios"]
+            manifestPlaceholders = [applicationId: "com.cmc.ios"]
 
             dimension "CMC_IPC"
             buildConfigField "String", "FLAVOR_APPCLIATION_ID", '"com.cmc.ios"'

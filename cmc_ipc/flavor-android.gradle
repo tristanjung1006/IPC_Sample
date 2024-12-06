@@ -3,7 +3,7 @@ android {
         android {
             versionName "1.2"
 
-            manifestPlaceholders = [authPlusApplicationId: "com.cmc.android"]
+            manifestPlaceholders = [applicationId: "com.cmc.android"]
 
             dimension "CMC_IPC"
             buildConfigField "String", "FLAVOR_APPCLIATION_ID", '"com.cmc.android"'
