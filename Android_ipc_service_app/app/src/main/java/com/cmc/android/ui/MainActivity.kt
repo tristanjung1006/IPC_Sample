@@ -16,19 +16,19 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding by lazy { requireNotNull(_binding) }
-    private var serviceManager: CmcCalcServiceManager? = null
+    private val serviceManager: CmcCalcServiceManager by lazy { CmcCalcServiceManager.getInstance(this) }
     private var jobId : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        bindService()
         doAppToApp()
     }
 
     private fun doAppToApp() {
         val bundle = intent.extras ?: return
-        bindService()
         jobId = bundle.getString(CmcBundleKey.KEY_JOB_ID)
         val firstNumber = bundle.getString(CmcBundleKey.KEY_FIRST_NUMBER)?.toIntOrNull()!!
         val secondNumber = bundle.getString(CmcBundleKey.KEY_SECOND_NUMBER)?.toIntOrNull()!!
@@ -66,8 +66,6 @@ class MainActivity : AppCompatActivity() {
         resultMsg: String,
         resultData: String?
     ) {
-        if (serviceManager == null) return
-
         val replyMsg = Message.obtain(null, CmcMessageType.RESP, 0, 0).apply {
             data = Bundle().apply {
                 putInt(CmcBundleKey.KEY_RESULT_CODE, resultCode)
@@ -76,23 +74,16 @@ class MainActivity : AppCompatActivity() {
                 putString(CmcBundleKey.KEY_JOB_ID, jobId)
             }
         }
-        serviceManager?.sendMessage(replyMsg)
+        serviceManager.sendMessage(replyMsg)
         finishAndRemoveTask()
     }
 
     private fun bindService() {
-        if (serviceManager != null) return
-
-        serviceManager = CmcCalcServiceManager(this).also {
-            it.connectService()
-        }
+        serviceManager.connectService()
     }
 
     private fun unBindingService() {
-        if (serviceManager == null) return
-
-        serviceManager?.disConnect()
-        serviceManager = null
+        serviceManager.disConnect()
     }
 
     override fun onDestroy() {

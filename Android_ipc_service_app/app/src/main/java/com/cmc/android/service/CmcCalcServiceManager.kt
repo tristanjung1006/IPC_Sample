@@ -1,5 +1,6 @@
 package com.cmc.android.service
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,8 +12,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class CmcCalcServiceManager(context: Context) {
+
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        private var INSTANCE: CmcCalcServiceManager? = null
+        fun getInstance(context: Context): CmcCalcServiceManager {
+            if (INSTANCE == null) {
+                INSTANCE = CmcCalcServiceManager(context)
+            }
+            return INSTANCE!!
+        }
+
+        fun release() {
+            INSTANCE = null
+        }
+    }
+
     private var mContext: Context? = null
     private var mConnection: ServiceConnection? = null
     private var mService: Messenger? = null
@@ -54,6 +72,7 @@ class CmcCalcServiceManager(context: Context) {
             mContext?.unbindService(mConnection!!)
             mBind = false
         }
+        release()
         mConnection = null
     }
 

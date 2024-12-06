@@ -73,6 +73,12 @@ class PopupDialog(
         _binding = null
     }
 
+    override fun show(manager: FragmentManager, tag: String?) {
+        manager.beginTransaction()
+            .add(this, tag)
+            .commitAllowingStateLoss()
+    }
+
     companion object {
         private var instance: PopupDialog? = null
         fun showDialog(content: String, fragmentManager: FragmentManager) {

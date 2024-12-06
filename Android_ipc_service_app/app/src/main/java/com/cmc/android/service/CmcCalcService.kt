@@ -13,6 +13,7 @@ import com.cmc.android.context.CalcContext
 import com.cmc.android.CmcBundleKey
 import com.cmc.android.CmcMessageType
 import com.cmc.android.ui.MainActivity
+import com.cmc.android.ui.SplashActivity
 
 class CmcCalcService : Service() {
 
@@ -46,7 +47,8 @@ class CmcCalcService : Service() {
         startActivity(
             firstNumber = firstNumber,
             secondNumber = secondNumber,
-            operator = operator
+            operator = operator,
+            jobId = jobId
         )
     }
 
@@ -71,11 +73,16 @@ class CmcCalcService : Service() {
         firstNumber: String,
         secondNumber: String,
         operator: Int,
+        jobId : String
     ) {
-        Intent(this, MainActivity::class.java).apply {
-            putExtra(CmcBundleKey.KEY_FIRST_NUMBER, firstNumber)
-            putExtra(CmcBundleKey.KEY_SECOND_NUMBER, secondNumber)
-            putExtra(CmcBundleKey.KEY_OPERATOR, operator)
+        val bundle = Bundle().apply {
+            putString(CmcBundleKey.KEY_FIRST_NUMBER, firstNumber)
+            putString(CmcBundleKey.KEY_SECOND_NUMBER, secondNumber)
+            putInt(CmcBundleKey.KEY_OPERATOR, operator)
+            putString(CmcBundleKey.KEY_JOB_ID, jobId)
+        }
+        Intent(this, SplashActivity::class.java).apply {
+            putExtras(bundle)
 
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
