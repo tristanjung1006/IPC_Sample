@@ -45,7 +45,7 @@ public class CmcServiceManager {
     private Messenger mService = null;
     private final Messenger mRespMessenger = new Messenger(responseHandler);
     private ServiceConnection mConnection;
-    private boolean mIsBind = false;
+    private boolean mIsBound = false;
     private CmcResponseCallback mCmcResponseCallback;
     private CmcServiceConnectionCallback mCmcServiceConnectionCallback;
 
@@ -77,7 +77,7 @@ public class CmcServiceManager {
     }
 
     private synchronized void doConnection(final IServiceConnection iServiceConnection) {
-        if (mIsBind) {
+        if (mIsBound) {
             iServiceConnection.onConnection();
             return;
         }
@@ -85,7 +85,7 @@ public class CmcServiceManager {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mService = new Messenger(service);
-                mIsBind = true;
+                mIsBound = true;
                 if (iServiceConnection != null) {
                     iServiceConnection.onConnection();
                 }
@@ -94,7 +94,7 @@ public class CmcServiceManager {
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 mService = null;
-                mIsBind = false;
+                mIsBound = false;
             }
         };
 
@@ -115,9 +115,9 @@ public class CmcServiceManager {
     }
 
     public void disConnection() {
-        if (mIsBind && mConnection != null) {
+        if (mIsBound && mConnection != null) {
             mContext.unbindService(mConnection);
-            mIsBind = false;
+            mIsBound = false;
         }
         mConnection = null;
     }

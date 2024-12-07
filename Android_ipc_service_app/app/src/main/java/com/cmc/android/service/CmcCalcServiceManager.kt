@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class CmcCalcServiceManager(context: Context) {
 
@@ -34,25 +33,25 @@ class CmcCalcServiceManager(context: Context) {
     private var mContext: Context? = null
     private var mConnection: ServiceConnection? = null
     private var mService: Messenger? = null
-    private var mBind = false
+    private var mIsBound = false
 
     init {
         this.mContext = context
     }
 
     fun connectService() {
-        if (mBind) {
+        if (mIsBound) {
             return
         }
         mConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 mService = Messenger(service)
-                mBind = true
+                mIsBound = true
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {
                 mService = null
-                mBind = false
+                mIsBound = false
             }
         }
 
@@ -68,16 +67,16 @@ class CmcCalcServiceManager(context: Context) {
     }
 
     fun disConnect() {
-        if (mBind) {
+        if (mIsBound) {
             mContext?.unbindService(mConnection!!)
-            mBind = false
+            mIsBound = false
         }
         release()
         mConnection = null
     }
 
     fun sendMessage(msg: Message) {
-        if (!mBind) return
+        if (!mIsBound) return
         mService?.send(msg)
     }
 }
