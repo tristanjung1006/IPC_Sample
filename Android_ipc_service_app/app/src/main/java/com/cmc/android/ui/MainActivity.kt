@@ -16,8 +16,12 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding by lazy { requireNotNull(_binding) }
-    private val serviceManager: CmcCalcServiceManager by lazy { CmcCalcServiceManager.getInstance(this) }
-    private var jobId : String? = null
+    private val serviceManager: CmcCalcServiceManager by lazy {
+        CmcCalcServiceManager.getInstance(
+            this
+        )
+    }
+    private var jobId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +34,18 @@ class MainActivity : AppCompatActivity() {
     private fun doAppToApp() {
         val bundle = intent.extras ?: return
         jobId = bundle.getString(CmcBundleKey.KEY_JOB_ID)
-        val firstNumber = bundle.getString(CmcBundleKey.KEY_FIRST_NUMBER)?.toIntOrNull()!!
-        val secondNumber = bundle.getString(CmcBundleKey.KEY_SECOND_NUMBER)?.toIntOrNull()!!
+        val firstNumber = bundle.getString(CmcBundleKey.KEY_FIRST_NUMBER)?.toIntOrNull()
+        val secondNumber = bundle.getString(CmcBundleKey.KEY_SECOND_NUMBER)?.toIntOrNull()
         val operator = bundle.getInt(CmcBundleKey.KEY_OPERATOR)
+
+        if (firstNumber == null || secondNumber == null) {
+            responseAppToApp(
+                resultCode = CmcResultCode.ERROR_INVALID_PARAMS,
+                resultMsg = CmcResultMsg.ERROR_INVALID_PARAMS,
+                resultData = null
+            )
+            return
+        }
 
         val result = kotlin.runCatching {
             when (operator) {
@@ -43,12 +56,13 @@ class MainActivity : AppCompatActivity() {
                 2 -> {
                     firstNumber - secondNumber
                 }
+
                 else -> {
                     0
                 }
             }
         }.getOrNull()
-        val resultData = if(result == null){
+        val resultData = if (result == null) {
             Triple(CmcResultCode.ERROR_UNSUPPORTED_NUMBER, CmcResultMsg.ERROR_INVALID_PARAMS, null)
         } else {
             Triple(CmcResultCode.RESULT_SUCCESS, CmcResultMsg.SUCCESS, result.toString())
