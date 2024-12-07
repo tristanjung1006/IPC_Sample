@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding by lazy { requireNotNull(_binding) }
     private var operator = CmcCalcType.PLUS
+    private val cmcManager by lazy { CmcManager(this) }
 
     private val cmcResponseCallback = object : CmcResponseCallback {
         override fun onSuccess(bundle: Bundle) {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
                 content = "계산결과 = $result",
                 fragmentManager = supportFragmentManager
             )
+            cmcManager.release()
         }
 
         override fun onFailure(bundle: Bundle) {
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 content = "code = $resultCode, msg = $resultMsg",
                 fragmentManager = supportFragmentManager
             )
+            cmcManager.release()
         }
 
     }
@@ -94,7 +97,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun startAppToApp() {
         if (CmcManager.isInstalled(this)) {
-            val cmcManager = CmcManager(this)
             cmcManager.requestCmcCalc(
                 CmcCalcRequestParams.Builder()
                     .setOperator(operator)
