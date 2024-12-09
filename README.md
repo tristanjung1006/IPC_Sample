@@ -1,7 +1,7 @@
 ## CMC 16기 스터디 자료
 직접 안드로이드 라이브러리를 만들어보고 적용하기
 ### 기능
-- Messenger, BoundService를 통한 IPC통신
+- Messenger, BindService를 통한 IPC통신
 - 모듈이 적용된 앱에서 서비스가 구현된 앱과 연결
 - 더하기, 빼기를 할 수 있는 기능
 ### 브랜치
